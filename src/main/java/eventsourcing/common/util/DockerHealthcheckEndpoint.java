@@ -7,7 +7,12 @@ import org.springframework.web.bind.annotation.*;
 public class DockerHealthcheckEndpoint {
     @GetMapping("/docker_healthcheck")
     @ResponseStatus(HttpStatus.OK)
-    public String requestEnrollment() {
+    public String dockerHealthcheck() {
+        return "OK";
+    }
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public String rootHealthcheck() {
         return "OK";
     }
 }
