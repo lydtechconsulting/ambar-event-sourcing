@@ -1,0 +1,44 @@
+---
+
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/test?currentSchema=demo
+    username: user
+    password: password
+
+# Configurations related to the event store
+app:
+  postgresql:
+    uri: jdbc:postgresql://postgres:5432/test?user=user&password=password
+    database: test
+    table: event_store
+    eventStoreCreateReplicationUserWithUsername: replication_username
+    eventStoreCreateReplicationUserWithPassword: replication_password
+    eventStoreCreateReplicationPublication: replication_publication
+  mongodb:
+#    uri: mongodb://my_mongo_username:my_mongo_password@mongodb:27017/projections?serverSelectionTimeoutMS=10000&connectTimeoutMS=10000&authSource=admin
+    uri: mongodb://mongodb:27017/projections?serverSelectionTimeoutMS=10000&connectTimeoutMS=10000&authSource=admin
+    database: projections
+  ambar:
+    username: username
+    password: password
+
+# Prevent updating the PostgreSQL schema, such that we can create/update the event store schema explicitly
+#spring:
+#  jpa:
+#    hibernate:
+#      ddl-auto: none
+
+# Prevent Spring Boot from trying to auto wire MongoDB clients and PostgreSQL clients
+#spring:
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration,org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration,org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+#  data:
+#    jpa:
+#      repositories:
+#        enabled: false
+
+

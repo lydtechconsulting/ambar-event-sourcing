@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{18}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- normal logging -->
+        <logger name="com" level="INFO"/>
+        <logger name="io" level="INFO"/>
+        <logger name="org" level="INFO"/>
+        <logger name="org.spring" level="INFO"/>
+        <logger name="eventsourcing" level="DEBUG"/>
+        <logger name="dev.lydtech" level="DEBUG"/>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

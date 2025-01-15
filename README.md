@@ -1,16 +1,40 @@
-# Event Sourcing - Java
+# Event Sourcing With Ambar
 
-This repository contains a starter pack for **Event Sourcing in Java** It is a production grade starting point 
-for your own event sourced application. The starter pack has everything you need to get started with event sourcing, 
-including an event store, a projection store, and an event bus.
+This repository contains a starter pack for **Event Sourcing with Ambar**.  It is a production grade starting point provided by [Ambar](https://ambar.cloud/).
 
-This starter pack implements a simple example for a Cooking Club Membership. But you're meant to replace this example
-with your own application.
+## Application Overview
+
+An application to join a cookery club is submitted and is either approved or rejected.
+
+You are approved if you do not have professional experience and have read some cookery books.
+
+The materialised view shows all membership applications, and all approved members by favourite cuisine.
+
+The following system architecture shows the application components, along with Postgres (used as the event store), Ambar, and (MongoDB used as the materialised view):
+
+![Event Sourcing with Ambar](resources/event-sourcing-ambar.png)
+
+These are the steps for a client submitting an application request:
+
+1. Client calls application REST API to submit an application to join the cookery club
+2. Application writes ApplicationSubmitted event to event store
+3. Ambar calls application to project (write) submission to material view
+4. Ambar calls application to react to ApplicationSubmitted event
+5. Application ReactionHandler writes ApplicationEvaluated event to event store (determines whether applicant is approved)
+6. Ambar calls application to project (write) applicant approved to material view (ignores rejection)
+7. Ambar calls application to react to ApplicationEvaluated, which is ignored
+
+The following sequence diagram describes this flow:
+
+![Sequence Diagram](resources/ambar-flow-seq.png)
+
+ER diagram for the MongoDB materialised view:
+
+![ERD](resources/ambar-erd.png)
 
 ## Getting Started
 
-To run this application you need Docker. Once you have Docker installed, please clone the code,
-navigate to the `local-development/scripts` folder.
+To run this application you need Docker. Once you have Docker installed, please clone the code, navigate to the `local-development/scripts` folder.
 
 ```bash
 git clone git@github.com:ambarltd/event-sourcing-java.git
@@ -25,22 +49,9 @@ You can then open your browser to:
 - [http://localhost:8081](http://localhost:8081) to view your event store
 - [http://localhost:8082](http://localhost:8082) to view your projection store
 
-## How to Develop Your Own Application
-
-Assuming you know event sourcing theory, developing on this application will feel very natural. Otherwise, don't worry - Ambar offers a **free** 1 day Event Sourcing course [here](https://ambar.cloud/event-sourcing-one-day-course). 
-
-To get a quick understanding of how this application works, please read the domain code in `src/main/java/eventsourcing/domain/`, the abstractions provided in `src/main/java/eventsourcing/common/`, and the README files also in `src/main/java/eventsourcing/common/`. With that reading done, here's a full picture:
-
-1. `src/main/java/eventsourcing/domain/`: where you define aggregates, events, commands, queries, projections, and reactions. You will spend most of your time here.
-2. `src/main/java/eventsourcing/common/`: a set of event sourcing abstractions. You will rarely need to edit files here, except for having to update the `Serializer` and `Deserializer` classes in `src/main/java/eventsourcing/domain/common/serializedevent/` whenever you add or remove events.
-3. Dependency injection and routes are defined with annotations, relying on Spring.
-
-When developing your application for the fist time, we recommend you keep the Cooking Club Membership code as an example you can quickly navigate to. Once you have implemented several commands, queries, projections, and reactions, delete the Cooking Club Membership code. This will require you to delete its code in `Domain`, and serialization logic in `Common/serializedEvent`.
-
 ## Additional Scripts
 
-Whenever you build a new feature, you might want to restart the application, or even delete the event store and projection
-store. We have provided scripts to help you with that.
+Whenever you build a new feature, you might want to restart the application, or even delete the event store and projection store.
 
 ```bash
 cd event-sourcing-java/local-development/scripts/linux # if you're on linux
@@ -50,13 +61,53 @@ cd event-sourcing-java/local-development/scripts/mac # if you're on mac
 ./dev_shutdown.sh # stops the application
 ```
 
-## Deployment
+## Component Tests
 
-To deploy this application to a production environment, you will simply need to build the code into a docker image,
-and deploy it to your cloud provider. We have provided infrastructure starter packs for various clouds in [this repository](https://github.com/ambarltd/event-sourcing-cloud-starter-packs).
+### Overview
 
-## Support
+The component tests treat the application and its dependencies as a black box, interacting with the system via the exposed application REST API to submit applicant requests and query the materialised view to validate correctness.
 
-If you get stuck, please feel free to ask questions in the #event-sourcing channel of our [Slack community](https://www.launchpass.com/ambar). 
-Or if you need further help like a free private walkthrough, simply book one [here](https://calendly.com/luis-ambar).
+The Postgres database, MongoDB database, Ambar instance, and the application under test are all spun up in docker containers using Lydtech's open source component test framework.
 
+![Component Testing with Ambar](resources/ambar-component-test.png)
+
+The following dependency is included in the [pom.xml](pom.xml) to pull in the framework:
+```
+<dependency>
+    <groupId>dev.lydtech</groupId>
+    <artifactId>component-test-framework</artifactId>
+    <version>3.7.2</version>
+    <scope>test</scope>
+</dependency>
+```
+
+The [EndToEndCT](src/test/java/eventsourcing/component/EndToEndCT.java) component test is written using JUnit, and annotated with `@ExtendWith(ComponentTestExtension.class)` to hook into the component test framework.  The framework orchestrates [Testcontainers](https://testcontainers.com) for spinning up and managing the required docker containers for the system under test, including the [Ambar Testcontainer](https://github.com/lydtechconsulting/component-test-framework/blob/v3.7.2/src/main/java/dev/lydtech/component/framework/management/TestcontainersManager.java#L733).  The configuration for the component test is defined in the `maven-surefire-plugin` for the `component` profile in the [pom.xml](pom.xml). 
+
+For more on the component test framework see: https://github.com/lydtechconsulting/component-test-framework
+
+### Steps To Run
+
+Build Spring Boot application jar:
+```
+mvn clean install
+```
+
+Build docker container:
+```
+docker build -f Dockerfile-component -t ct/eventsourcing:latest .
+```
+
+Run tests:
+```
+mvn test -Pcomponent
+```
+
+Run tests leaving containers up:
+```
+mvn test -Pcomponent -Dcontainers.stayup
+```
+
+Manual clean up (if left containers up):
+```
+docker rm -f $(docker ps -aq)
+```
