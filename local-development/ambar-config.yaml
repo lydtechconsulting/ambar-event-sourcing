@@ -44,3 +44,13 @@ data_destinations:
     password: password
     sources:
       - postgres_source
+
+# Uncomment this block to enable the lydtech-ambar-example destination in ambar
+#  - id: lydtech-ambar-example
+#    description: a simple lydtech client for ambar to post to
+#    type: http-push
+#    endpoint: http://172.94.0.113:8099/api/submit
+#    username: username
+#    password: password
+#    sources:
+#      - postgres_source

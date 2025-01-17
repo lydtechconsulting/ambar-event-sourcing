@@ -111,3 +111,16 @@ Manual clean up (if left containers up):
 ```
 docker rm -f $(docker ps -aq)
 ```
+
+### Steps to prove second service receives all events
+ensure example-ambar-destination is built locally (Maven build & docker build, see README at https://github.com/lydtechconsulting/example-ambar-destination)
+
+1. ./dev_start.sh # start docker containers
+2. ./dev_demo.sh # run demo
+3. Observe that no events are received by the example-ambar-destination: `docker logs lydtech-ambar-example`
+4. uncomment the config block in `ambar-config.yaml` that configures the ` lydtech-ambar-example`
+5. restart the ambar emulator `docker restart event-sourcing-event-bus`
+6. Observe 3 things
+   7. `docker logs event-sourcing-event-bus` shows that all the events have been sent to the new destination
+   8. `docker logs lydtech-ambar-example` shows that all events are received by the newly configured destination
+   9. `docker logs event-sourcing-backend` shows that no new events were received by the original destination since the emulator restart
