@@ -77,7 +77,7 @@ Given a running system with existing events in the event store
 When a new service is added
 Then the new service should receive and process the existing events
 ```
-Benefits: Event sourcing naturally supports the creation of new materialized views as business requirements evolve. The ability to seamlessly introduce a new service into the ecosystem that can process historical events without disrupting the existing architecture provides significant flexibility and scalability.
+Benefits: Event sourcing naturally supports the creation of new materialised views as business requirements evolve. The ability to seamlessly introduce a new service into the ecosystem that can process historical events without disrupting the existing architecture provides significant flexibility and scalability.
 
 ### 1. Component Testing an Application Using Ambar
 
