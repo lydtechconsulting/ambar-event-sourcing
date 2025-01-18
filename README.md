@@ -12,7 +12,7 @@ The materialised view shows all membership applications, and all approved member
 
 The following system architecture shows the application components, along with Postgres (used as the event store), Ambar, and (MongoDB used as the materialised view):
 
-![Event Sourcing with Ambar](resources/event-sourcing-ambar.png)Audit 
+![Event Sourcing with Ambar](resources/ambar-event-sourcing.png)
 
 These are the steps for a client submitting an application request:
 
