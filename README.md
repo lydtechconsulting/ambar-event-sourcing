@@ -1,4 +1,4 @@
-# Event Sourcing With Ambar
+# Event Sourcing with Ambar
 
 This repository contains a starter pack for **Event Sourcing with Ambar**.  It is a production grade starting point provided by [Ambar](https://ambar.cloud/).
 
@@ -94,12 +94,12 @@ The following dependency is included in the [pom.xml](pom.xml) to pull in the fr
 <dependency>
     <groupId>dev.lydtech</groupId>
     <artifactId>component-test-framework</artifactId>
-    <version>3.7.2</version>
+    <version>3.7.3</version>
     <scope>test</scope>
 </dependency>
 ```
 
-The [EndToEndCT](src/test/java/eventsourcing/component/EndToEndCT.java) component test is written using JUnit, and annotated with `@ExtendWith(ComponentTestExtension.class)` to hook into the component test framework.  The framework orchestrates [Testcontainers](https://testcontainers.com) for spinning up and managing the required docker containers for the system under test, including the [Ambar Testcontainer](https://github.com/lydtechconsulting/component-test-framework/blob/v3.7.2/src/main/java/dev/lydtech/component/framework/management/TestcontainersManager.java#L733).  The configuration for the component test is defined in the `maven-surefire-plugin` for the `component` profile in the [pom.xml](pom.xml). 
+The [EndToEndCT](src/test/java/eventsourcing/component/EndToEndCT.java) component test is written using JUnit, and annotated with `@ExtendWith(ComponentTestExtension.class)` to hook into the component test framework.  The framework orchestrates [Testcontainers](https://testcontainers.com) for spinning up and managing the required docker containers for the system under test, including the [Ambar Testcontainer](https://github.com/lydtechconsulting/component-test-framework/blob/v3.7.3/src/main/java/dev/lydtech/component/framework/management/TestcontainersManager.java#L733).  The configuration for the component test is defined in the `maven-surefire-plugin` for the `component` profile in the [pom.xml](pom.xml). 
 
 For more on the component test framework see: https://github.com/lydtechconsulting/component-test-framework
 
