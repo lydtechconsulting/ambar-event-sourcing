@@ -6,13 +6,13 @@ This repository contains a starter pack for **Event Sourcing with Ambar**.  It i
 
 An application to join a cookery club is submitted and is either approved or rejected.
 
-You are approved if you do not have professional experience and have read some cookery books.
+The applicant is approved if they do not have professional experience and have read some cookery books.
 
 The materialised view shows all membership applications, and all approved members by favourite cuisine.
 
 The following system architecture shows the application components, along with Postgres (used as the event store), Ambar, and (MongoDB used as the materialised view):
 
-![Event Sourcing with Ambar](resources/event-sourcing-ambar.png)
+![Event Sourcing with Ambar](resources/event-sourcing-ambar.png)Audit 
 
 These are the steps for a client submitting an application request:
 
@@ -27,10 +27,6 @@ These are the steps for a client submitting an application request:
 The following sequence diagram describes this flow:
 
 ![Sequence Diagram](resources/ambar-flow-seq.png)
-
-ER diagram for the MongoDB materialised view:
-
-![ERD](resources/ambar-erd.png)
 
 ## Getting Started
 
@@ -61,9 +57,31 @@ cd event-sourcing-java/local-development/scripts/mac # if you're on mac
 ./dev_shutdown.sh # stops the application
 ```
 
-## Component Tests
+## Side Project Challenge
 
 ### Overview
+
+The existing application has not been changed, but rather two important use cases for applications using event sourcing have been identified and demonstrated.
+
+1. Component testing an application using Ambar
+```
+Given an application is being developed
+And the application integrates with Ambar
+Then tests that validate this integration should be straightforward to create
+```
+Testing an application’s integration with external systems like Ambar as a black box ensures correctness of behavior and configurations. These tests should be simple to develop and run both locally and in the CI pipeline, ensuring consistency across environments. This approach enables early detection of integration issues and continuous validation of system functionality.
+
+2. Handling the addition of a new service
+```
+Given a running system with existing events in the event store
+When a new service is added
+Then the new service should receive and process the existing events
+```
+Event sourcing naturally supports the creation of new materialized views as business requirements evolve. The ability to seamlessly introduce a new service into the ecosystem that can process historical events without disrupting the existing architecture provides significant flexibility and scalability.
+
+### 1. Component Testing an Application Using Ambar
+
+#### Overview
 
 The component tests treat the application and its dependencies as a black box, interacting with the system via the exposed application REST API to submit applicant requests and query the materialised view to validate correctness.
 
@@ -85,7 +103,7 @@ The [EndToEndCT](src/test/java/eventsourcing/component/EndToEndCT.java) componen
 
 For more on the component test framework see: https://github.com/lydtechconsulting/component-test-framework
 
-### Steps To Run
+#### Steps To Run
 
 Build Spring Boot application jar:
 ```
@@ -112,15 +130,11 @@ Manual clean up (if left containers up):
 docker rm -f $(docker ps -aq)
 ```
 
-### Steps to prove second service receives all events
-ensure example-ambar-destination is built locally (Maven build & docker build, see README at https://github.com/lydtechconsulting/example-ambar-destination)
+### 2. Handling the Addition of a New Service
 
-1. ./dev_start.sh # start docker containers
-2. ./dev_demo.sh # run demo
-3. Observe that no events are received by the example-ambar-destination: `docker logs lydtech-ambar-example`
-4. uncomment the config block in `ambar-config.yaml` that configures the ` lydtech-ambar-example`
-5. restart the ambar emulator `docker restart event-sourcing-event-bus`
-6. Observe 3 things
-   7. `docker logs event-sourcing-event-bus` shows that all the events have been sent to the new destination
-   8. `docker logs lydtech-ambar-example` shows that all events are received by the newly configured destination
-   9. `docker logs event-sourcing-backend` shows that no new events were received by the original destination since the emulator restart
+This demo adds a new service to an existing deployment that already has historic events stored in the event store. It demonstrates that those events will be delivered to the new application when the Ambar emulator is restarted.
+
+The demo uses a separate Spring Boot application representing an audit service that is responsible for capturing membership status updates.  The repository is here:
+https://github.com/lydtechconsulting/ambar-audit-service
+
+View the [Readme](https://github.com/lydtechconsulting/ambar-audit-service/blob/main/README.md) in that repository for the steps to run the demo. 

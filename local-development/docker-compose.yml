@@ -189,23 +189,6 @@ services:
     ports:
       - "8082:8082"
 
-  lydtech-ambar-example:
-    image: lydtech-ambar-example
-    container_name: lydtech-ambar-example
-    restart: always
-    depends_on:
-      event-sourcing-event-store:
-        condition: service_healthy
-      event-sourcing-projection-store:
-        condition: service_healthy
-    expose:
-      - 8099
-    ports:
-      - "8099:8099"
-    networks:
-      event-sourcing:
-        ipv4_address: 172.94.0.113
-
 networks:
     event-sourcing:
         driver: bridge

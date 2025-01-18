@@ -45,11 +45,11 @@ data_destinations:
     sources:
       - postgres_source
 
-# Uncomment this block to enable the lydtech-ambar-example destination in ambar
-#  - id: lydtech-ambar-example
-#    description: a simple lydtech client for ambar to post to
+# Uncomment this block to enable the ambar-audit-service destination in ambar
+#  - id: Audit_CookingClub_Membership
+#    description: Audit service for cooking club membership events
 #    type: http-push
-#    endpoint: http://172.94.0.113:8099/api/submit
+#    endpoint: http://172.94.0.114:8099/api/v1/audit/cooking-club/membership/projection
 #    username: username
 #    password: password
 #    sources:
