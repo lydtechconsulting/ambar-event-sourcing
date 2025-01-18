@@ -157,7 +157,7 @@ https://github.com/lydtechconsulting/ambar-audit-service.
 
 **In the** [ambar-audit-service](https://github.com/lydtechconsulting/ambar-audit-service) **project**:
 
-3. Build the audit service Spring Boot application (with Java 21), build the docker container, and start the application `ambar-audit-service` and the Postgres database in docker containers::
+3. Build the audit service Spring Boot application (with Java 21), build the docker container, and start the application `ambar-audit-service` and the Postgres database in docker containers:
 ```
 mvn clean install
 docker build -t ambar-audit-service .
