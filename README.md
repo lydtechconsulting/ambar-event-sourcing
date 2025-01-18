@@ -149,7 +149,7 @@ https://github.com/lydtechconsulting/ambar-audit-service.
 
 1. Ensure that the Ambar configuration for the audit endpoint `Audit_CookingClub_Membership` is commented out in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
 
-2. Start the Ambar docker containers and run the demo to populate the event store with events (as described in #Getting Started above).
+2. Start the Ambar docker containers and run the demo to populate the event store with events (as described in [#Getting Started](https://github.com/lydtechconsulting/ambar-event-sourcing#getting-started) above).
 ```
 ./dev_start.sh
 ./dev_demo.sh
