@@ -145,7 +145,7 @@ https://github.com/lydtechconsulting/ambar-audit-service.
 
 #### Steps To Run
 
-**In this (`ambar-event-sourcing`) project**:
+**In this (**`ambar-event-sourcing`**) project**:
 
 1. Ensure that the Ambar configuration for the audit endpoint `Audit_CookingClub_Membership` is commented out in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
 
@@ -164,7 +164,7 @@ docker build -t ambar-audit-service .
 docker-compose up -d
 ```
 
-**In this (`ambar-event-sourcing`) project**:
+**In this (**`ambar-event-sourcing`**) project**:
 
 4. Uncomment the Ambar configuration for the audit endpoint `Audit_CookingClub_Membership` in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
 
