@@ -10,7 +10,7 @@ The applicant is approved if they do not have professional experience and have r
 
 The materialised view shows all membership applications, and all approved members by favourite cuisine.
 
-The following system architecture shows the application components, along with Postgres (used as the event store), Ambar, and (MongoDB used as the materialised view):
+The following system architecture shows the application components, along with Postgres (used as the event store), Ambar, and MongoDB (used as the materialised view):
 
 ![Event Sourcing with Ambar](resources/ambar-event-sourcing.png)
 
@@ -67,9 +67,9 @@ The existing application has not been changed, but rather two important use case
 ```
 Given an application is being developed
 And the application integrates with Ambar
-Then tests that validate this integration should be straightforward to create
+Then tests that validate this integration should be straightforward to create and execute
 ```
-Testing an application’s integration with external systems like Ambar as a black box ensures correctness of behavior and configurations. These tests should be simple to develop and run both locally and in the CI pipeline, ensuring consistency across environments. This approach enables early detection of integration issues and continuous validation of system functionality.
+Benefits: Testing an application’s integration with external systems like Ambar as a black box ensures correctness of behavior and configurations. These tests should be simple to develop and run both locally and in the CI pipeline, ensuring consistency across environments. This approach enables early detection of integration issues and continuous validation of system functionality.
 
 2. Handling the addition of a new service
 ```
@@ -77,7 +77,7 @@ Given a running system with existing events in the event store
 When a new service is added
 Then the new service should receive and process the existing events
 ```
-Event sourcing naturally supports the creation of new materialized views as business requirements evolve. The ability to seamlessly introduce a new service into the ecosystem that can process historical events without disrupting the existing architecture provides significant flexibility and scalability.
+Benefits: Event sourcing naturally supports the creation of new materialized views as business requirements evolve. The ability to seamlessly introduce a new service into the ecosystem that can process historical events without disrupting the existing architecture provides significant flexibility and scalability.
 
 ### 1. Component Testing an Application Using Ambar
 
