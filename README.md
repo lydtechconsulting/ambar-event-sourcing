@@ -132,9 +132,52 @@ docker rm -f $(docker ps -aq)
 
 ### 2. Handling the Addition of a New Service
 
+#### Overview
+
 This demo adds a new service to an existing deployment that already has historic events stored in the event store. It demonstrates that those events will be delivered to the new application when the Ambar emulator is restarted.
 
-The demo uses a separate Spring Boot application representing an audit service that is responsible for capturing membership status updates.  The repository is here:
-https://github.com/lydtechconsulting/ambar-audit-service
+The application provides an endpoint to receive notifications of membership submissions and evaluations, and writes the associated status updates to a Postgres materialised view.  This database can then be queried via the application's REST API.
 
-View the [Readme](https://github.com/lydtechconsulting/ambar-audit-service/blob/main/README.md) in that repository for the steps to run the demo. 
+![Audit service](resources/ambar-audit-application.png)
+
+The demo uses a separate Spring Boot application representing an audit service that is responsible for capturing membership status updates.  The repository for the application is here:
+https://github.com/lydtechconsulting/ambar-audit-service.
+
+#### Steps To Run
+
+**In this (`ambar-event-sourcing`) project**:
+
+1. Ensure that the Ambar configuration for the audit endpoint `Audit_CookingClub_Membership` is commented out in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
+
+2. Start the Ambar docker containers and run the demo to populate the event store with events (as described in #Getting Started above).
+```
+./dev_start.sh
+./dev_demo.sh
+```
+
+**In the** [ambar-audit-service](https://github.com/lydtechconsulting/ambar-audit-service) **project**:
+
+3. Build the audit service Spring Boot application (with Java 21), build the docker container, and start the application `ambar-audit-service` and the Postgres database in docker containers::
+```
+mvn clean install
+docker build -t ambar-audit-service .
+docker-compose up -d
+```
+
+**In this (`ambar-event-sourcing`) project**:
+
+4. Uncomment the Ambar configuration for the audit endpoint `Audit_CookingClub_Membership` in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
+
+5. Restart the Ambar emulator.  The historic events should be sent to the audit service projection endpoint, and written to the Postgres materialised view:
+```
+docker restart event-sourcing-event-bus
+```
+
+6. Query the materialised view via the REST API to view the latest membership statuses:
+```
+curl http://localhost:8099/api/v1/audit/cooking-club/membership/query/list
+```
+Observe the output:
+```
+[{"name":"Linda Thomas","status":"Approved","createdAt":"2025-01-18T16:47:50.343001Z","lastUpdatedAt":"2025-01-18T16:47:50.395517Z"},{"name":"Patricia Jones","status":"Rejected","createdAt":"2025-01-18T16:47:51.761195Z","lastUpdatedAt":"2025-01-18T16:47:51.810726Z"} ......... ]
+```

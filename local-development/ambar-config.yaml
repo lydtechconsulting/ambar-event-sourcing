@@ -45,7 +45,7 @@ data_destinations:
     sources:
       - postgres_source
 
-# Uncomment this block to enable the ambar-audit-service destination in ambar
+# Uncomment this block to enable the ambar-audit-service destination in Ambar
 #  - id: Audit_CookingClub_Membership
 #    description: Audit service for cooking club membership events
 #    type: http-push
