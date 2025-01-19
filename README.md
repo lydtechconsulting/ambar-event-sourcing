@@ -136,18 +136,18 @@ docker rm -f $(docker ps -aq)
 
 This demo adds a new service to an existing deployment that already has historic events stored in the event store. It demonstrates that those events will be delivered to the new application when the Ambar emulator is restarted.
 
-The application provides an endpoint to receive notifications of membership submissions and evaluations, and writes the associated status updates to a Postgres materialised view.  This database can then be queried via the application's REST API.
+The application provides an endpoint to receive notifications of membership submissions and evaluations, and writes the associated membership status updates to a Postgres materialised view.  This database can then be queried via the application's REST API.
 
-![Audit service](resources/ambar-audit-application.png)
+![Enquiry service](resources/ambar-enquiry-application.png)
 
-The demo uses a separate Spring Boot application representing an audit service that is responsible for capturing membership status updates.  The repository for the application is here:
-https://github.com/lydtechconsulting/ambar-audit-service.
+The demo uses a separate Spring Boot application representing an enquiry service that is responsible for capturing membership status updates.  The repository for the application is here:
+https://github.com/lydtechconsulting/ambar-enquiry-service.
 
 #### Steps To Run
 
 **In this (**`ambar-event-sourcing`**) project**:
 
-1. Ensure that the Ambar configuration for the audit endpoint `Audit_CookingClub_Membership` is commented out in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
+1. Ensure that the Ambar configuration for the enquiry endpoint `Enquiry_CookingClub_Membership` is commented out in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
 
 2. Start the Ambar docker containers and run the demo to populate the event store with events (as described in [#Getting Started](https://github.com/lydtechconsulting/ambar-event-sourcing#getting-started) above).
 ```
@@ -155,27 +155,27 @@ https://github.com/lydtechconsulting/ambar-audit-service.
 ./dev_demo.sh
 ```
 
-**In the** [ambar-audit-service](https://github.com/lydtechconsulting/ambar-audit-service) **project**:
+**In the** [ambar-enquiry-service](https://github.com/lydtechconsulting/ambar-enquiry-service) **project**:
 
-3. Build the audit service Spring Boot application (with Java 21), build the docker container, and start the application `ambar-audit-service` and the Postgres database in docker containers:
+3. Build the enquiry service Spring Boot application (with Java 21), build the docker container, and start the application `ambar-enquiry-service` and the Postgres database in docker containers:
 ```
 mvn clean install
-docker build -t ambar-audit-service .
+docker build -t ambar-enquiry-service .
 docker-compose up -d
 ```
 
 **In this (**`ambar-event-sourcing`**) project**:
 
-4. Uncomment the Ambar configuration for the audit endpoint `Audit_CookingClub_Membership` in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
+4. Uncomment the Ambar configuration for the enquiry endpoint `Enquiry_CookingClub_Membership` in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
 
-5. Restart the Ambar emulator.  The historic events should be sent to the audit service projection endpoint, and written to the Postgres materialised view:
+5. Restart the Ambar emulator.  The historic events should be sent to the enquiry service projection endpoint, and written to the Postgres materialised view:
 ```
 docker restart event-sourcing-event-bus
 ```
 
 6. Query the materialised view via the REST API to view the latest membership statuses:
 ```
-curl http://localhost:8099/api/v1/audit/cooking-club/membership/query/list
+curl http://localhost:8099/api/v1/enquiry/cooking-club/membership/query/list
 ```
 Observe the output:
 ```
