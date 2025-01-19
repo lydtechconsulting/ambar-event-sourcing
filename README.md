@@ -173,7 +173,7 @@ docker-compose up -d
 docker restart event-sourcing-event-bus
 ```
 
-6. Query the materialised view via the REST API to view the latest membership statuses:
+6. Query the materialised view via the REST API to view all memberships, each with their latest status:
 ```
 curl http://localhost:8099/api/v1/enquiry/cooking-club/membership/query/list
 ```
