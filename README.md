@@ -63,7 +63,7 @@ cd event-sourcing-java/local-development/scripts/mac # if you're on mac
 
 The existing application has not been changed, but rather two important use cases for applications using event sourcing have been identified and demonstrated.
 
-1. Component testing an application using Ambar
+1. Component testing an application that uses Ambar
 ```
 Given an application is being developed
 And the application integrates with Ambar
@@ -79,7 +79,7 @@ Then the new service should receive and process the existing events
 ```
 Benefits: Event sourcing naturally supports the creation of new materialised views as business requirements evolve. The ability to seamlessly introduce a new service into the ecosystem that can process historical events without disrupting the existing architecture provides significant flexibility and scalability.
 
-### 1. Component Testing an Application Using Ambar
+### 1. Component Testing an Application that Uses Ambar
 
 #### Overview
 
@@ -99,7 +99,9 @@ The following dependency is included in the [pom.xml](pom.xml) to pull in the fr
 </dependency>
 ```
 
-The [EndToEndCT](src/test/java/eventsourcing/component/EndToEndCT.java) component test is written using JUnit, and annotated with `@ExtendWith(ComponentTestExtension.class)` to hook into the component test framework.  The framework orchestrates [Testcontainers](https://testcontainers.com) for spinning up and managing the required docker containers for the system under test, including the [Ambar Testcontainer](https://github.com/lydtechconsulting/component-test-framework/blob/v3.7.3/src/main/java/dev/lydtech/component/framework/management/TestcontainersManager.java#L733).  The configuration for the component test is defined in the `maven-surefire-plugin` for the `component` profile in the [pom.xml](pom.xml). 
+The [EndToEndCT](src/test/java/eventsourcing/component/EndToEndCT.java) component test is written using JUnit.  It sends submit application requests to the cuisine application and queries the materialised view all via the application's REST API, and asserts the expected entries are returned. 
+
+The test is annotated with `@ExtendWith(ComponentTestExtension.class)` to hook into the component test framework.  The framework orchestrates [Testcontainers](https://testcontainers.com) for spinning up and managing the required docker containers for the system under test, including the [Ambar Testcontainer](https://github.com/lydtechconsulting/component-test-framework/blob/v3.7.3/src/main/java/dev/lydtech/component/framework/management/TestcontainersManager.java#L733).  The configuration for the component test is defined in the `maven-surefire-plugin` for the `component` profile in the [pom.xml](pom.xml). 
 
 For more on the component test framework see: https://github.com/lydtechconsulting/component-test-framework
 
