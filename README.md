@@ -2,6 +2,8 @@
 
 This repository contains a starter pack for **Event Sourcing with Ambar**.  It is a production grade starting point provided by [Ambar](https://ambar.cloud/).
 
+It demonstrates event sourcing and CQRS with a Postgres event store, and uses Ambar to provide a high performance cache layer that can rapidly build new or historical projections with no impact on the event store or upstream services.
+
 ## Application Overview
 
 An application to join a cookery club is submitted and is either approved or rejected.
