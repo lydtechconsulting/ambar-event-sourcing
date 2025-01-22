@@ -161,23 +161,30 @@ https://github.com/lydtechconsulting/ambar-enquiry-service.
 
 **In the** [ambar-enquiry-service](https://github.com/lydtechconsulting/ambar-enquiry-service) **project**:
 
-3. Build the enquiry service Spring Boot application (with Java 21), build the docker container, and start the application `ambar-enquiry-service` and the Postgres database in docker containers:
+3. Run the script from the root of the `ambar-enquiry-service` project that builds the enquiry service Spring Boot application (requires Java 21), builds the docker container, and starts the application `ambar-enquiry-service` and the Postgres database in docker containers:
 ```
-mvn clean install
-docker build -t ambar-enquiry-service .
-docker-compose up -d
+./scripts/enquiry_demo.sh
 ```
 
 **In this (**`ambar-event-sourcing`**) project**:
 
-4. Uncomment the Ambar configuration for the enquiry endpoint `Enquiry_CookingClub_Membership` in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
+4. Query the enquiry service materialised view via the enquiry service REST API to show there are no memberships recorded:
+```
+curl http://localhost:8099/api/v1/enquiry/cooking-club/membership/query/list
+```
+Observe the output:
+```
+[]
+```
 
-5. Restart the Ambar emulator.  The historic events should be sent to the enquiry service projection endpoint, and written to the Postgres materialised view:
+5. Uncomment the Ambar configuration for the enquiry endpoint `Enquiry_CookingClub_Membership` in the [ambar-config.yaml](https://github.com/lydtechconsulting/ambar-event-sourcing/blob/main/local-development/ambar-config.yaml#L48) file.
+
+6. Restart the Ambar emulator.  The historic events should be sent to the enquiry service projection endpoint, and written to the Postgres materialised view:
 ```
 docker restart event-sourcing-event-bus
 ```
 
-6. Query the enquiry service materialised view via the enquiry service REST API to view all memberships, each with their latest status:
+7. Query the enquiry service materialised view via the enquiry service REST API to view all memberships, each with their latest status:
 ```
 curl http://localhost:8099/api/v1/enquiry/cooking-club/membership/query/list
 ```
