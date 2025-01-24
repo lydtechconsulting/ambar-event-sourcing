@@ -1,0 +1,33 @@
+name: Project Pipeline
+
+on:
+  push:
+    branches:
+      - "**" # Trigger on all branches
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Java environment
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+
+      # Maven clean install
+      - name: Maven Clean Install
+        run: mvn clean install
+
+      # Docker build
+      - name: Docker Build
+        run: docker build -f Dockerfile-component -t ct/eventsourcing:latest .
+
+      # Maven test with the component profile
+      - name: Maven Test with Component Profile
+        run: mvn test -Pcomponent
