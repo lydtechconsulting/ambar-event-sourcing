@@ -46,11 +46,11 @@ data_destinations:
       - postgres_source
 
 # Uncomment this block to enable the ambar-enquiry-service destination in Ambar
-  - id: Enquiry_CookingClub_Membership
-    description: Enquiry service for cooking club membership events
-    type: http-push
-    endpoint: http://172.94.0.114:8099/api/v1/enquiry/cooking-club/membership/projection
-    username: username
-    password: password
-    sources:
-      - postgres_source
+#  - id: Enquiry_CookingClub_Membership
+#    description: Enquiry service for cooking club membership events
+#    type: http-push
+#    endpoint: http://172.94.0.114:8099/api/v1/enquiry/cooking-club/membership/projection
+#    username: username
+#    password: password
+#    sources:
+#      - postgres_source
