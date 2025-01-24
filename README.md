@@ -96,18 +96,18 @@ The following dependency is included in the [pom.xml](pom.xml) to pull in the fr
 <dependency>
     <groupId>dev.lydtech</groupId>
     <artifactId>component-test-framework</artifactId>
-    <version>3.7.3</version>
+    <version>3.7.4</version>
     <scope>test</scope>
 </dependency>
 ```
 
 The [EndToEndCT](src/test/java/eventsourcing/component/EndToEndCT.java) component test is written using JUnit.  It sends submit application requests to the cuisine application and queries the materialised view all via the application's REST API, and asserts the expected entries are returned. 
 
-The test is annotated with `@ExtendWith(ComponentTestExtension.class)` to hook into the component test framework.  The framework orchestrates [Testcontainers](https://testcontainers.com) for spinning up and managing the required docker containers for the system under test, including the [Ambar Testcontainer](https://github.com/lydtechconsulting/component-test-framework/blob/v3.7.3/src/main/java/dev/lydtech/component/framework/management/TestcontainersManager.java#L733).  The configuration for the component test is defined in the `maven-surefire-plugin` for the `component` profile in the [pom.xml](pom.xml). 
+The test is annotated with `@ExtendWith(ComponentTestExtension.class)` to hook into the component test framework.  The framework orchestrates [Testcontainers](https://testcontainers.com) for spinning up and managing the required docker containers for the system under test, including the [Ambar Testcontainer](https://github.com/lydtechconsulting/component-test-framework/blob/v3.7.4/src/main/java/dev/lydtech/component/framework/management/TestcontainersManager.java#L733).  The configuration for the component test is defined in the `maven-surefire-plugin` for the `component` profile in the [pom.xml](pom.xml). 
 
 For more on the component test framework see: https://github.com/lydtechconsulting/component-test-framework
 
-#### Steps To Run
+#### Steps to Run Locally
 
 Build Spring Boot application jar:
 ```
@@ -133,6 +133,17 @@ Manual clean up (if left containers up):
 ```
 docker rm -f $(docker ps -aq)
 ```
+
+#### Running in the Pipeline
+
+Github Actions is configured to automatically run the component tests as part of the CI pipeline.
+
+The configuration for running the tests is defined in the [build-and-test.yml](.github/workflows/build-and-test.yml) file, which includes the following command:
+```
+run: mvn test -Pcomponent
+```
+
+The workflow run results can be viewed here: https://github.com/lydtechconsulting/ambar-event-sourcing/actions
 
 ### 2. Handling the Addition of a New Service
 
