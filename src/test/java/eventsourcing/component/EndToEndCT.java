@@ -61,7 +61,7 @@ public class EndToEndCT {
         sendSubmitApplicationRequest(requestToReject);
 
         // Submit an application that should be approved.
-        String firstNameToApprove = "John";
+        String firstNameToApprove = "INCORRECT";
         String lastNameToApprove = randomAlphabetic(1).toUpperCase()+randomAlphabetic(5).toLowerCase();
         String cuisineTypeToApprove = randomAlphabetic(1).toUpperCase()+randomAlphabetic(3).toLowerCase() + " Curry";
         SubmitApplicationRequest requestToApprove = SubmitApplicationRequest.builder()
