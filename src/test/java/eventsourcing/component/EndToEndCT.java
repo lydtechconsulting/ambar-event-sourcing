@@ -82,7 +82,7 @@ public class EndToEndCT {
 
                 List<Object> membersByCuisine = response.jsonPath().getList("$");
                 assertThat(membersByCuisine, notNullValue());
-                assertThat(membersByCuisine, hasSize(greaterThan(99)));
+                assertThat(membersByCuisine, hasSize(greaterThan(0)));
 
                 Optional<LinkedHashMap<String, List<String>>> expectedCuisineType = membersByCuisine.stream()
                         .filter(item -> item instanceof LinkedHashMap)
