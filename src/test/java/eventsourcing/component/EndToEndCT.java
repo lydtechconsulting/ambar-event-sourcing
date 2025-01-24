@@ -61,7 +61,7 @@ public class EndToEndCT {
         sendSubmitApplicationRequest(requestToReject);
 
         // Submit an application that should be approved.
-        String firstNameToApprove = "INCORRECT";
+        String firstNameToApprove = "John";
         String lastNameToApprove = randomAlphabetic(1).toUpperCase()+randomAlphabetic(5).toLowerCase();
         String cuisineTypeToApprove = randomAlphabetic(1).toUpperCase()+randomAlphabetic(3).toLowerCase() + " Curry";
         SubmitApplicationRequest requestToApprove = SubmitApplicationRequest.builder()
@@ -82,7 +82,7 @@ public class EndToEndCT {
 
                 List<Object> membersByCuisine = response.jsonPath().getList("$");
                 assertThat(membersByCuisine, notNullValue());
-                assertThat(membersByCuisine, hasSize(greaterThan(0)));
+                assertThat(membersByCuisine, hasSize(greaterThan(99)));
 
                 Optional<LinkedHashMap<String, List<String>>> expectedCuisineType = membersByCuisine.stream()
                         .filter(item -> item instanceof LinkedHashMap)
