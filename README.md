@@ -134,7 +134,7 @@ Manual clean up (if left containers up):
 docker rm -f $(docker ps -aq)
 ```
 
-#### Running in the Pipeline
+#### Running in the CI Pipeline
 
 Github Actions is configured to automatically run the component tests as part of the CI pipeline.
 
